@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <cstring>
+#include <string>
 #include <set>
 using namespace std;
 
@@ -48,13 +50,9 @@ public:
 	}
 	//53
 	int maxSubArray(vector<int>& nums) {
-		nums.push_back(0);
 		int length = nums.size();
-		if (length == 1)
+		if (length == 0)
 			return 0;
-		if (length == 2)
-			return nums[0];
-
 		int dp = nums[0];
 		bool flag = dp >= 0;
 		int maxd = nums[0];
@@ -62,11 +60,9 @@ public:
 		for (int i = 1; i < length; ++i) {
 			dp = max(dp + nums[i], max(0, nums[i]));
 			ans = max(ans, dp);
-			if (i != length - 1)
-				maxd = max(maxd, nums[i]);
-			if (nums[i] >= 0 && i != length - 1)
+			maxd = max(maxd, nums[i]);
+			if (nums[i] >= 0)
 				flag = true;
-
 		}
 		if (!flag) {
 			return maxd;
@@ -78,6 +74,38 @@ public:
 
 
 	//198
+	int rob(vector<int>& nums) {
+		int len = nums.size();
+		if (len == 0) {
+			return 0;
+		}
+		if (len == 1) {
+			return nums[0];
+		}
+		int dp[1001];
+		memset(dp, 0, sizeof(dp));
+		dp[0] = nums[0];
+		dp[1] = max(nums[0], nums[1]);
+		for (int i = 2; i < len; ++i) {
+			dp[i] = max(nums[i] + dp[i - 2], dp[i - 1]);
+		}
+		return max(dp[len - 2], dp[len - 1]);
+	}
+	//303
+	int sum[10000];
+	vector<int> a;
+	void NumArray(vector<int>& nums) {
+		memset(sum, 0, sizeof(sum));
+		a = nums;
+		if (nums.size() != 0)
+			sum[0] = nums[0];
+		for (int i = 1; i < nums.size(); ++i) {
+			sum[i] = sum[i - 1] + nums[i];
+		}
+	}
+	int sumRange(int i, int j) {
+		return sum[j] - sum[i] + a[i];
+	}
 };
 
 
