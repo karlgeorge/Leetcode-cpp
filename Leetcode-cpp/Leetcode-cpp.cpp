@@ -46,6 +46,38 @@ public:
 		}
 		return b;
 	}
+	//53
+	int maxSubArray(vector<int>& nums) {
+		nums.push_back(0);
+		int length = nums.size();
+		if (length == 1)
+			return 0;
+		if (length == 2)
+			return nums[0];
+
+		int dp = nums[0];
+		bool flag = dp >= 0;
+		int maxd = nums[0];
+		int ans = dp;
+		for (int i = 1; i < length; ++i) {
+			dp = max(dp + nums[i], max(0, nums[i]));
+			ans = max(ans, dp);
+			if (i != length - 1)
+				maxd = max(maxd, nums[i]);
+			if (nums[i] >= 0 && i != length - 1)
+				flag = true;
+
+		}
+		if (!flag) {
+			return maxd;
+		}
+		return ans;
+	}
+	//53 div
+
+
+
+	//198
 };
 
 
