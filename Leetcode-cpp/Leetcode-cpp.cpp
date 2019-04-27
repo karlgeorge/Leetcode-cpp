@@ -106,6 +106,122 @@ public:
 	int sumRange(int i, int j) {
 		return sum[j] - sum[i] + a[i];
 	}
+	//647
+	int countSubstrings(string s) {
+		string temp = "#";
+		for (int i = 0; i < s.size(); ++i) {
+			temp = temp + s[i] + '#';
+		}
+		int length = temp.size();
+		int last_mid = 0;
+		int max_edge = 0;
+		int dp[10005];
+		memset(dp, 0, sizeof(dp));
+		int step = 0;
+		int ans = 0;
+		while (step < length) {
+
+			//if (step < max_edge) {
+			//	dp[step] = dp[2 * last_mid - step];
+			//	ans += dp[step];
+			//}
+			//int i = 0;
+			//for (i = 0; step + i < length && step - i >= 0; ++i) {
+			//	if (temp[step + i] != temp[step - i]) {
+			//		break;
+			//	}
+			//}
+			//i = i - 1;
+			//if (step + i >= max_edge) {
+			//	max_edge = step + i;
+			//	last_mid = step;
+			//	if (!(i == 0 && temp[step] == '#')) {
+			//		++dp[step];
+			//		ans += dp[step];
+			//	}
+			//	++step;
+			//}
+			int base = 0;
+			if (step <= max_edge) {
+				base = dp[2 * last_mid - step];
+			}
+			//for (; step + base < length && step - base >= 0; ++base) {
+			//	if (temp[step + base] != temp[step - base]) {
+			//		base = base - 1;
+			//		break;
+			//	}
+			//}
+			int i = base;
+			do{
+				if (temp[step + i] == '#') {
+					--base;
+				}
+				++i;
+				++base;
+				if (!(step + i < length && step - i >= 0)) {
+					break;
+				}
+			} while (temp[step + i] == temp[step - i]);
+			dp[step] += base;
+			//cout << dp[step] << "";
+			ans += dp[step];
+			step++;
+		}
+		return ans;
+	}
+	string longestPalindrome(string s) {
+		string temp = "#";
+		for (int i = 0; i < s.size(); ++i) {
+			temp = temp + s[i] + '#';
+		}
+		int length = temp.size();
+		int last_mid = 0;
+		int max_edge = 0;
+		int dp[2005];
+		memset(dp, 0, sizeof(dp));
+		int step = 0;
+		int ans = 0;
+		int x = 0;
+		while (step < length) {
+
+			int base = 0;
+			if (step <= max_edge) {
+				base = dp[2 * last_mid - step];
+			}
+			int i = base;
+			do{
+				if (temp[step + i] == '#') {
+				}
+				++i;
+				++base;
+				if (!(step + i < length && step - i >= 0)) {
+					break;
+				}
+			} while (temp[step + i] == temp[step - i]);
+			dp[step] += base;
+			if (dp[step] > ans) {
+				ans = dp[step];
+				x = step;
+			}
+			step++;
+		}
+		int i = 0;
+		//cout << x << endl;
+		string ss = "";
+		while(temp[x + i] == temp[x - i]){
+			if (temp[x + i] != '#') {
+				if (i != 0) {
+					ss = temp[x - i] + ss + temp[x - i];
+				}
+				else ss = temp[x];
+			}
+			++i;
+			if (!(x + i < length && x - i >= 0)) {
+				break;
+			}
+		}
+		return ss;
+	}
 };
 
 
@@ -113,6 +229,6 @@ public:
 int main()
 {
 	Solution s;
-	cout << s.climbStairs(4) << endl;
+	cout << s.longestPalindrome("cbbd") << endl;
 }
 
